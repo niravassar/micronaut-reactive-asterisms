@@ -16,17 +16,17 @@ netty:
       max-order: 3
 
 asterisms:
-  title: "Micronaut Reactive Asterisms" # shown in header and menu
-  name: "Micronaut app by nirav that is deployed to asterisms ecosystem" # slightly more descriptive name
+  title: "Micronaut Reactive Asterisms"
+  name: "Micronaut app by nirav that is deployed to asterisms ecosystem"
   description: "Geting familiar with the process to get an app into asterisms"
-  bundle-id: "com.reactive.beginner.asterisms" ## e.g "io.example.awesomeness" REVERSE FQDN style
+  bundle-id: "com.reactive.beginner.asterisms"
   subdomain: "micronaut" #
   domain: "${ASTERISMS_DOMAIN:asterisms.local}"
   capabilities:
-    - API_SERVICE # I am reachable as an API
+    - API_SERVICE
   security:
     filter:
-      pattern: "/api/**" # Which routes to enforce security rules on.
+      pattern: "/api/**"
     token:
       jwks:
         primary:
