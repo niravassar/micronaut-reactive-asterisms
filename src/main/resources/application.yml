@@ -1,6 +1,15 @@
 micronaut:
   application:
     name: micronautBeginnerReactive
+  ## Server Related Configuration
+  server:
+    ssl:
+      enabled: true
+      port: 3010
+      keyStore:
+        path: file:/certificates/asterisms_local.p12
+        password: changeit
+        type: PKCS12
 netty:
   default:
     allocator:
@@ -16,7 +25,6 @@ asterisms:
   capabilities:
     - API_SERVICE # I am reachable as an API
   security:
-    enabled: true
     filter:
       pattern: "/api/**" # Which routes to enforce security rules on.
     token:
