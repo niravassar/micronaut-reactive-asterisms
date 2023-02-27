@@ -20,10 +20,11 @@ asterisms:
   name: "Micronaut app by nirav that is deployed to asterisms ecosystem"
   description: "Geting familiar with the process to get an app into asterisms"
   bundle-id: "com.reactive.beginner.asterisms"
-  subdomain: "micronaut" #
+  subdomain: "micronaut-reactive-asterisms"
   domain: "${ASTERISMS_DOMAIN:asterisms.local}"
   capabilities:
     - API_SERVICE
+    - FRONTEND_WEBSITE
   security:
     filter:
       pattern: "/api/**"
