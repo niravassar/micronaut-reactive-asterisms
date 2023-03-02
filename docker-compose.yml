@@ -1,0 +1,23 @@
+version: "3"
+
+networks:
+  default:
+    external:
+      name: asterisms-ecosystem_asterisms
+
+services:
+  micronaut_reactive_asterisms:
+    hostname: micronaut-reactive-asterisms.asterisms.local
+    container_name: micronaut_reactive_asterisms
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3010:443"
+      - "6000:6000"
+    env_file:
+      - ./micronaut-docker.env # Make sure this is the correct path for your setup.
+    environment:
+      # Add any other custom variables that are specific to this app.
+      JAVA_TOOL_OPTIONS: "-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:6000"
+    command: java -Djava.security.egd=file:/dev/./urandom -jar /home/app/application.jar

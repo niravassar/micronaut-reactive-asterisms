@@ -1,7 +1,36 @@
 micronaut:
   application:
     name: micronautBeginnerReactive
+  ## Server Related Configuration
+  server:
+    ssl:
+      enabled: true
+      port: 3010
+      keyStore:
+        path: file:/certificates/asterisms_local.p12
+        password: changeit
+        type: PKCS12
 netty:
   default:
     allocator:
       max-order: 3
+
+asterisms:
+  title: "Micronaut Reactive Asterisms"
+  name: "Micronaut app by nirav that is deployed to asterisms ecosystem"
+  description: "Geting familiar with the process to get an app into asterisms"
+  bundle-id: "com.reactive.beginner.asterisms"
+  subdomain: "micronaut-reactive-asterisms"
+  domain: "${ASTERISMS_DOMAIN:asterisms.local}"
+  capabilities:
+    - API_SERVICE
+    - FRONTEND_WEBSITE
+  security:
+    filter:
+      pattern: "/api/**"
+    token:
+      jwks:
+        primary:
+          key: '{"p":"wHYWyXHCV7SroURkCiXBmhx_eMV0kWc8qzUXuZgLUPR8Y7ddRKfZZUw0OtyNK7ImfDOkuSMKVlkk8G30WBjsMGqybudBAoSlru4Tgg3CsrAHffpbBDwNBYmgqru9YPDlzdRNI6q4pIg2-rVDAI-yabE_tS7oXsVk5a084bpexyc","kty":"RSA","q":"5M4JK3zRusJ5JN3kUITeLvadioa4nvbWUzpxiL2WvDNT31jk9F-jydS2Ez2MF2Rv_5Jd1sfHNddhSOxXFSHo_g8SgUbMyUrfLpy-Dnsx5FXPWefvs4hO1nrNoWQ7nsjaXhqJoC0h8dOrkgq15ThO4-8puB0QfgbW6clFYCS2Ec8","d":"A--qlFyQxHtraLyA26FUTSPp7Iu_zptnQLOKg1rnwEIhzjBb3wQs6YvD5kOV4ZYTZdNrPjI54-TzllXl3gUJMKrYvDDr4arKBSZ2qATCcGHz_jvB3IkmSuFA34rhDKYsAtjOJHP2GzR921GEENR5Je5NCa09cXZCJVgevEbI88nNLVhnciBE-GiqZRdZrky_w9Nn29zLrNfyJMOjwkwwrnSbgc2jxIRgSyQXGfVu2bK0jK4yewVGHkAFLXHjDt_uxVA-EF-tUmdNcy_GXgZ-LvJpmq3ymIumAqcJKU04486_XbstSU1S2L9KymtpEECl4p7qJEnU1rr_GI4r3zyeVQ","e":"AQAB","use":"sig","kid":"413acb504be64ab3be102e313af0e8ce","qi":"Rzr58fExGqBZkLrx9_9v0heAK7iDvurxM4Lx5jBwCI1BUVtLyE1TaiixKob9Yw2ZeMsmuYWsNkSMZovzL_OqjBuFg6OcfP7O0LqWV4HO6LUgB16Xml3eF3SeObEX58mT71_JErP7SUYyARGo5fmyWdorkzkbUGZcP0r5_8p9Vcs","dp":"S50ZjsNW60ZcN9u6whHbYkTYAAbzqTy6JTmSvKPzrjafuD2OMy8OxjGOQ6HrBMPVQu63RNVzdkFHtf49BW-lO9BvkgrhC7A5t-RpXasyVym5h9EYeS1uoEJWET35RWDfqGJEfELSkDHEB_O3Az1xhvzQXsqzGKjM3z-Ur8qc-fk","alg":"RS256","dq":"1olCG96boKv8f073Z3BODGb87QjJT3RPHhbsobRzA-B0wjVN6L1MjFDAsGXDV6O7SD3rcxo7dgaPl5rTRGNZXe6wATtrhUqI3eHmaxmkfF7hX4GURhiHI6Bd8vhS1t2psxba-K-Y5nD8rKESUO1tO1fjHFlUP3cWSHuKa03A0g0","n":"rAQSNpfkaS-bpv22KiOb0dUqA9BDUYTXVVEtngezJ2mtUejLX4uuWwtXsLSENim0wma4EVI8yplujUFqG3eHbpDiE4P3kLOHIXvXdGCyaRtvC_avMWR1cyXpQu5KdeF_6vjUHbhmR8xJe_7BwHnhHVL1A6HZMv1fWyUOdrqBYM-Q-jH1ekerecGBEiLRMIerlYD98A0Efd_WU9hT6Agvol8xNasE4JfIHHxMhF5AQ_nux8mhmAqzUD35pT61roMRqyl9oOTU_EsV2C-pFRR9jJHqcxYwFYrIx3C2XFqPk-f5traBPIDD5GpaDu3TzLxOILDMPkEXnbeKpjzpD5afiQ"}'
+      jwt:
+        issuer: "https://${asterisms.subdomain}.${asterisms.domain}"

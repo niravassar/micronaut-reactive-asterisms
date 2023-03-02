@@ -3,12 +3,16 @@ plugins {
     id("io.micronaut.application") version "3.7.0"
     id 'java'
     id "io.freefair.lombok" version "5.3.0"
+    id "com.google.cloud.artifactregistry.gradle-plugin" version "2.1.5"
 }
 
 version = "0.1"
 group = "com.reactive.beginner"
 
 repositories {
+    maven {
+        url = "${artifact_repoUrl}"
+    }
     mavenCentral()
 }
 
@@ -22,6 +26,15 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.micronaut:micronaut-validation")
 
+    // Asterisms Ecosystem Components
+    implementation("io.asterisms:asterisms-core:${asterismsCoreVersion}")
+    implementation("io.asterisms:asterisms-backend-core:${asterismsBackendCoreVersion}")
+    implementation("io.asterisms:asterisms-security:${asterismsSecurityVersion}")
+
+    // Asterisms Testing
+    testImplementation("io.asterisms:asterisms-backend-core-testing-utils:${asterismsBackendCoreVersion}")
+    testImplementation("io.asterisms:asterisms-security-testing-utils:${asterismsSecurityVersion}")
+
     testImplementation("io.projectreactor:reactor-test:3.4.0")
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.1')
 
@@ -32,8 +45,8 @@ application {
     mainClass.set("com.reactive.beginner.Application")
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion("11")
-    targetCompatibility = JavaVersion.toVersion("11")
+    sourceCompatibility = JavaVersion.toVersion("${javaVersion}")
+    targetCompatibility = JavaVersion.toVersion("${javaVersion}")
 }
 
 graalvmNative.toolchainDetection = false

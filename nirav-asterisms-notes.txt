@@ -1,0 +1,297 @@
+Asterisms project
+======================================
+
+Documentation
+https://objectcomputing.github.io/asterisms-documentation/#
+
+https://objectcomputing.com/expertise/asterisms
+
+https://github.com/objectcomputing/asterisms-infrastructure-local/releases
+
+Scott Devaughn, Eldon, Mike Wood
+
+Intro notes
+---------------
+- astermisms is an ecosystem and collection of services to kickstart technical projects.
+- asterism is a closed source project which gives a way to bootstrap new projects with built in features as deployment, authentication, notification, etc
+- you can create applications alongside with the technology.
+- it lets us speed up delivery of client projects, then we license the technology and gain fees for its usage from the clients.
+- it can be used to bootstrap and allow base projects like blockchain, or datascience or ai to focus on its main technology and leave the ui, micronaut, deployment to asterisms. it could use any technology also like python, java, jquery, react.
+
+Goal - goal is for nero is to contribute to onboarding documentation on how to use asterisms to get a micronaut app into the asterisms ecosystem. take notes along the way and turn these into a consumable documentation which can be used by other developers.
+
+jason Goal
+------------
+The goal is for you to learn about what Asterisms is, what its components are, and how it works.  The exercise is to learn that by standing up a new environment and building a simple Asterisms application that uses some of the components.  I'd like you to share back some of these learnings by making contributions to the developer documentation.  I'd also like you to come up with ideas for sample applications that could be used to illustrate Asterisms to customers
+
+Read the Doc
+========================
+- it is drop in replacement of auth, storage, google drive, email, account management.
+- [x] check the docker memory to be 8GB
+	- edit wslconfig and then restart windows
+	- run  docker info --format='{{.MemTotal}}'
+- [x] check docker .wslconfig
+- [x] start with docker stuff
+- [x] create another application names micronaut-reactive-asterisms
+
+Setup
+===================
+- installed mkcert
+- made env var - $ env | grep GOOGLE_APPLICATION_CREDENTIALS
+GOOGLE_APPLICATION_CREDENTIALS=C:\Users\nirav\asterisms\ga_dev_sa.json
+
+	Questions
+	------------------
+	- [x] what is filter workflow runs
+
+	- [x] how does a micronaut jar app conceptually get inserted into asterisms
+		- on local development, asterisms-core is in a container. The custom application uses a docker compose file which binds everything together with the rest of the asterisms network.
+	- [x] how does the micronaut app connect to get all the functionality thats supposed to come with asterisms, like database, user account, email, ui, or documentation.
+		- there is some libraries you grab them and use the interfaces and those are exposed, and your app calls those components. UI is same way and micronaut use those interfaces
+	- [x] what other features does it provide?
+		- Oauth, google, all configurable, saml, workspace (with multitenancy), there is security annotation
+	- [x] how does it support all other technologies? how is that possible.
+		- everything is through http. ideas is you write a custom app in node js, and you dont have write all the surrounding aspects. Only the core domain functionality is in node js. It will call services offered by asterims.
+	- [x] how long has this project gone about, and how many people have developed it. Is it part of oci and only oci people?
+		- 8 months so far, oci folks. 5-6 people
+	- [x] is greet the only customer so far to use it? how long was the project and was what the result.
+		- tolam using it now, first use was greet. Xtract
+	- [] how do you debug the app locally without asterisms stuff all over it. with it plan deployed within netty
+
+	- [] right the readme to get this up and running with asterisms
+
+
+	Josh Hooten showing me a Xtract demo
+	-------------------------------------------
+	- internal project used for canadian national railroad software as a service. railroads have lot of unplanned incidents in huge logs files. xtract tracts all these problems. this app cuts down on the manual labor to review these incidents. They migrated it into asterisms. Asterisms is a step above so it provides authentication it comes bundled, it offers multinenantcy.
+	 - https://github.com/objectcomputing/asterisms-backend-example
+		- see the fruit app - its a micronaut app that is analogous to what i am trying to do.
+
+	Create sample app and download sample apps
+	------------------------------------------------
+
+	Created apps here:
+
+	- https://github.com/niravassar/micronaut-reactive-asterisms
+	- C:\Users\nirav\Documents\oci-training-code\asterisms\micronaut-reactive-asterisms
+
+	Fruitapp
+	------------------
+	- just sends back a mono of strings.
+	- has a docker-compose with url and jwt token issues and ports
+	- build.gradle has asterisms dependencies; gradle.properties has version numbers and a asterisms artifact repo.
+	- application.yml has asterisms block with security key and also ASTERISMS_DOMAIN
+	- DockerFile has commands to create the jar and copy certs and also runs a keytool and it runs the jar with java jar.
+	- this area has certs: fruit-app/src/main/resources/certificates
+	- has a startup.sh and that runs docker commands
+
+	asterisms eco system
+	--------------------------
+	[x] cli directions are unclear
+	- [x] what is CLI for -- this is confusing, no idea what it is for
+	asterisms-up.sh is as script that checks credentials checks docker, then installs stuff
+	- CLI has more refined commands, and the asterisms-up calls the CLI for tasks. you use CLI with ./asterisms-cli
+	- run the script and it copies certificates into user/.asterisms, and then downloads asterisms docker images, you can then see it in your docker images. pulls mailhog, redis, zipkin, bunch of asterims workspaces, asterisms keytool, asterisms profile, ui
+
+
+	Seed Shire problem
+	=========================
+	- it asks to add stuff to C:\Windows\System32\drivers\etc\hosts now? -- this led to errors
+		- [x] try to look into these errors -- ** RAN AS ADMIN USER AND IT CHANGED and edited
+		- [x] hosts file might be a problem
+	- seed_shire.sh, just plain did not work
+		- [x] look at seedshire stuff
+		- platform core has ERROR - try to log out the errors.
+		- some commands
+			- ./asterisms-cli system init --email=sysadmin@example.com --password=theonering --requester=owner@example.com
+		- [x] start with gandolf tomorrow
+
+			- ./asterisms-cli system status
+			- ./seed_shire.sh
+			- ./asterisms-up.sh --down
+			- ./asterisms-up.sh --recreate
+			- docker ps
+			- docker log (container_id)
+			- docker compose -f docker-compose.asterisms-ecosystem.yml up -d
+			= docker compose -f docker-compose.asterisms-ecosystem.yml stop
+			- docker compose -f docker-compose.asterisms-ecosystem.yml down
+
+	PROBLEM DESCRIPTION
+	=========================
+	- I have run ./asterisms-up.sh successfully
+	- I ran into an error early on where the hosts file (I AM USING WINDOWS), wasnt edited properly. But i ran it with admin priviledges and it was edited properly then. I get entries such as below and it looks good.
+	127.0.0.1 account.asterisms.local
+	::1 account.asterisms.local
+	- my ~/.asterisms/certificates folder has the correct files in it
+	- I proceed onto ./seed_shire.sh and I get this error
+			Checking the system status
+
+			---------------------------------------------------------------
+			platform
+			  core                 ERROR
+			---------------------------------------------------------------
+			account
+			  core                 ERROR
+			------------------------------------------------------------
+			Initializing the system
+
+			Client 'account': Connect Error: No such host is known (account.asterisms.local)
+			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			[ERROR] The System Could Not be initialized. Please check your error.
+			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	- I looked at the logs for the container of platform and also account. I dont see any significant errors.
+	- when docker is up and running, i cannot go to these urls locally
+	  account      https://account.asterisms.local
+	  auth         https://auth.asterisms.local
+
+	- my thoughts are its windows hosts problem or something, but again I am at a loss
+	============================================================
+	- used mikes document and change the hosts file to be windows and UT8
+	- this worked the docs he wrote is on the folder on a pdf.
+	- https://docs.google.com/document/d/1p7ngOuF-7wJLK5RwYiEBwdy2usCmO45K4-1HaLtppeg/edit?usp=sharing
+	==============================================================
+
+	Continue setup
+	==========================
+	- login into https://auth.asterisms.local and mailhog http://localhost:8025/. get the directions from https://github.com/objectcomputing/asterisms-infrastructure-local#running-the-application-for-the-first-time README file.
+	- you can accept the invite as gandalf (has highest priviledges) clicking on the code should link to sign on page/
+	- gandalf@example.com/ITGSB
+	- password, niravassar51
+
+	Update gradle.properties and build.gradle
+	===========================================
+	- follow the backend directions and compare to the examples fruit-app
+
+	Update application.yml
+	==========================
+	- copy the block of asterisms, and plugin values, generate the jwk with ./asterisms-cli jwk generate
+	- [x] the order of directions is messed up for "Update micronaut properties in the same file"
+	- [x] the certs directions are hanging "Also note that you need.."
+	- [x] this section is a little out of place "Asterisms is Opinionated"
+	- [x] this is out of place "Run the following command to make sure everything is compiling correctly:" - is it reffering to ./gradlew assemble
+	- made the micronaut.service.ssl.port equal 3010 which is same as fruitapp
+		- the ketStore.password is changit, but the fruitapp has localcert.
+	- extend application with AsterismsApplication
+	- ./gradlew assemble worked
+
+	Docker Compose the application
+	=======================================
+	- do the Dockerfile, docker-compose and micronaut-docker.env file
+	- do startup.sh
+	- [x] this has wrong name - You'll want to make this executable so run chmod a+x ./setup.sh. -- should be startup.sh
+	- add to hosts file.
+
+
+
+
+
+Micronaut Asterims Api adding
+======================================
+	- ./startup.sh
+	- try to do micronaut backend work to configure the system.
+	- https://micronaut-reactive-asterisms.asterisms.local:3010/hello
+		- [x] why do you need the port mapping for this machine
+
+Troubleshooting
+===========================
+
+	App does not show withing auth.asterims.local in the "fetching" area
+	-----
+	https://platform.asterisms.local/api/product/register
+	- https://platform.asterisms.local/api/product/
+	- ** SOLVED: application.yml subdomain+domain needed to match the hostname in docker-compose file
+	- app is not showing in the window because i didnt specificy it as a frontend. -- add FRONTEND_WEBSITE to application.yml
+
+
+	- [x] try to add the other apps to the asterisms system -- see how it works
+
+Deploy example apps
+==============================
+	Timer app
+	---------
+
+	got this error
+		#7 [3/5] COPY ./build/libs/timer-0.1-all.jar /home/app/application.jar
+	#7 sha256:2380ea6eb202f78f4e9d69be317ce69b722ac4e3e6e5af1f3a450e7b4a9e76ee
+	#7 ERROR: "/build/libs/timer-0.1-all.jar" not found: not found
+	------
+	 > [3/5] COPY ./build/libs/timer-0.1-all.jar /home/app/application.jar:
+	------
+	failed to compute cache key: "/build/libs/timer-0.1-all.jar" not found: not found
+	Service 'dev_io_example_timer' failed to build : Build failed
+	- change the version in the build.gradle file to not be snapshot and try
+		- ** that got past the error!
+
+	- https://timer.asterisms.local:6000/now not working -- This address uses a network port which is normally used for purposes other than Web browsing. Firefox has canceled the request for your protection.
+		-- changed to 3010 **
+
+	- got this error for db password
+		dev_io_example_timer | 17:02:27.085 [main] ERROR io.micronaut.runtime.Micronaut - Error starting Micronaut server: Bean definition [io.micronaut.data.r2dbc.config.R2dbcSchemaGenerator] could not be loaded: Error instantiating bean of type  [io.micronaut.data.r2dbc.config.R2dbcSchemaGenerator]
+
+		dev_io_example_timer |
+
+		dev_io_example_timer | Message: password authentication failed for user "eldon"
+
+		dev_io_example_timer | Path Taken: new R2dbcSchemaGenerator(List configurations)
+
+		dev_io_example_timer | io.micronaut.context.exceptions.BeanInstantiationException: Bean definition [io.micronaut.data.r2dbc.config.R2dbcSchemaGenerator] could not be loaded: Error instantiating bean of type  [io.micronaut.data.r2dbc.config.R2dbcSchemaGenerator]
+		- *** deleted the config for the database and it comes up working now ***
+
+	- https://timer.asterisms.local:3011/api/timer/now and the app shows up in the dashboard
+	- ** made commit changes of the adjusments i made -- committed locally - made a branch "nirav-stuff"
+
+	Fruit app
+	===================
+	- changed the port to be :3012
+
+	Error:
+			------
+	 > [4/5] COPY  ./src/main/resources/certificates/asterisms_local.crt /home/asterisms_local.crt:
+	------
+	failed to compute cache key: "/src/main/resources/certificates/asterisms_local.crt" not found: not found
+	Service 'dev_test_proj' failed to build : Build failed
+
+	- try to copt the Dockerfile from micronaut-reactive-asterisms over to the fruit app and see if it works
+		-- ** worked and copy /certificates into the folder under the fruit-app project
+
+	- test-proj.asterisms.local:3012
+	-- ** didnt work gave up, this version of script files is way different and too mant cert changes.
+
+
+Documentation changes
+=========================================
+Repo:
+
+https://github.com/objectcomputing/asterisms-documentation/blob/main/docs/asterisms.md
+
+Commands:
+
+npm i docsify-cli -g
+docsify serve ./docs
+
+	notes
+	=========================================
+	- [x] go back and note all the odd things in the doc file
+	- ** there should be an overview of how a micronaut app plugins into the asterisms eco system. quick description or a diagram of what the other app suites are and how it is able to plug in.
+	- [x] Specify windows help for hosts files adjustment after this section
+		- "CD into it and run the ./asterisms-up.sh script."
+		- specify some handy commands to start and stop services with docker compose (up down stop -d)
+	- [x] After seed_shire.sh, we need to put the section "Running the application for the first time" -- change to Running the asterism eco system for first time. it comes from https://github.com/objectcomputing/asterisms-infrastructure-local - you can copy it.
+	- [x] Setup the Asterisms CLI - this sections should clarify some of the sentences and say waht the cli is used for, And how to run the cli - point to the readme: https://github.com/objectcomputing/asterisms-cli/tree/develop/java/asterisms-cli
+	- [x] Examples Repository - describe some of the more useful repositories like fruit app and timer, and which portions of the configuration notable.
+	- [x] In Update your build.gradle, that sentence doesnt make sense; ask about what it should be -- there are brackets [] everywhere
+	- [x] "Update micronaut properties in the same file" -- make sure certs are installed should be first, then so the asterisms-up --setup-certificates.
+	-[x] ". Also note that you need" in the green doesnt make sense, ask about it.
+	-[x] "Asterisms is Opinionated" -  this section is a little out of place change tite to View Env Variable settings. -- Run the following command to make sure everything is compiling correctly: should be moved down ... then do: ./gradlew assemble
+	- [x] Startup script (Optional) -- take the optional out, it is necessary and helps a lot.
+
+	Learn Docsify
+	=====================
+	- [x] download the repo for docs
+	- [x] learn how to do docsfiy locally and make changes
+	- [x] get familiar with the repo readmes
+
+PR: https://github.com/objectcomputing/asterisms-documentation/pull/90
+
+
