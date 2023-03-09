@@ -39,4 +39,9 @@ public class MovieController {
     Mono<Movie> addJimCarreyToMovieAsActor() {
         return movieService.addJimCarreyToMovieAsActor().log();
     }
+
+    @Get("/getActorsInDb")
+    Flux<Actor> getActorsInDb() {
+        return movieService.getAllActorsInDb().log();
+    }
 }

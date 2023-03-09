@@ -1,5 +1,6 @@
 package com.reactive.beginner.service;
 
+import com.reactive.beginner.dataservice.ActorRepository;
 import com.reactive.beginner.dataservice.DataServiceApi;
 import com.reactive.beginner.entity.Actor;
 import com.reactive.beginner.entity.Movie;
@@ -16,12 +17,19 @@ public class MovieService {
     @Inject
     DataServiceApi dataServiceApi;
 
+    @Inject
+    ActorRepository actorRepository;
+
     public Flux<Movie> getAllMovies() {
         return dataServiceApi.getAllMovies();
     }
 
     public Flux<Actor> getAllActors() {
         return dataServiceApi.getAllActors();
+    }
+
+    public Flux<Actor> getAllActorsInDb() {
+        return actorRepository.findAll();
     }
 
     public Flux<Movie> findAllMoviesWithGenreAndMadeAfterYear(String genre, long year) {
