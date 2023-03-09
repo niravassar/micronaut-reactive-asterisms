@@ -1,5 +1,5 @@
 
-# Micronaut Reactive Asterisms
+# Micronaut Reactive Asterisms Summary And Purpose
 
 This application was created with the purpose of deploying it to the Asterisms Ecosystem. In order to do this, I followed the documentation 
 by the asterisms team to set up the environment locally with docker and micronaut. The purpose of this was to get familiar on how to integrate
@@ -7,17 +7,40 @@ a micronaut app into the asterisms ecosystem and the effort involved.
 
 ## Reference Documentation
 
-Documentation on Developer Setup to use the Asterism Eco System 
+- Documentation on Developer Setup to use the Asterism Eco System 
 https://objectcomputing.github.io/asterisms-documentation/#
 
-Asterisms Project Page
+- Asterisms Project Page
 https://objectcomputing.com/expertise/asterisms
 
-Nirav Detail Person Notes
-- these notes were taken along the way i am just saving them for reference. 
-- [nirav-asterisms-notes.txt](./nirav-asterisms-notes.txt)
+- Nirav Detailed Person Notes 
+these notes were taken along the way i am just saving them for reference. 
+[nirav-asterisms-notes.txt](./nirav-asterisms-notes.txt)
 
-# Micronaut Beginner Reactive Application
+---
+# Micronaut Reactive Asterisms - Features Used In Asterisms Eco-system
+
+This section describes the features used within the asterisms eco-system, and also explains the technical
+details used to implement them
+
+## JPA Entity Mapping to Postgres Database
+
+- The `Actor` entity is mapped to a postgres database. A reactive micronaut data repository is used to retrieve the data. 
+- The `asterisms-backend-core-postgres` dependency contains the libraries and annotation necessary for mapping the entity, flyway and using the repository.
+- To set up the database in the asterisms system, you must execute the script in the `asterismsDatabase` container. For ex: `docker exec asterismsDatabase db_config/provision.sh asterisms_nirav io_asterisms_nirav`
+- See `application.yml` for configuration used to hook to the database
+
+## Live debugging Application in Asterisms Docker Environment
+
+In order to debug the application when it is plugged into the asterisms eco-system, you must create a `Remote JVM Debug`
+Configuration in Intellij. The `docker-compose.yml` exposes a debug port in java tool options, and the intellij
+must connect to do. Create a run configuration as `Remote JVM Debug`. Choose the port as 6000, and the `main` as the module.
+Run the configuration and see it connect. 
+
+The configuration is stored as an xml file under `/.runConfiguration`, and checked in. 
+
+---
+# Micronaut Reactive Asterisms Application Summary
 
 This application was created by me (Nirav Assar) January 2023 while learning and exploring Project Reactor and reactive programming 
 principles.  

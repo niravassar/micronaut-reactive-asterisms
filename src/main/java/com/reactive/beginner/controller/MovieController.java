@@ -53,6 +53,11 @@ public class MovieController {
         return movieService.addJimCarreyToMovieAsActor().log();
     }
 
+    @Get("/getActorsInDb")
+    Flux<Actor> getActorsInDb() {
+        return movieService.getAllActorsInDb().log();
+    }
+
     @Get("/sendNotification")
     void sendNotificaton() {
         // send notification using hard coded UUID

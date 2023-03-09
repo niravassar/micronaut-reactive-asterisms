@@ -31,6 +31,10 @@ dependencies {
     implementation("io.asterisms:asterisms-backend-core:${asterismsBackendCoreVersion}")
     implementation("io.asterisms:asterisms-security:${asterismsSecurityVersion}")
 
+    // Asterisms Default Database Setup
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    implementation("io.asterisms:asterisms-backend-core-postgres:${asterismsBackendCoreVersion}")
+
     // Asterisms Testing
     testImplementation("io.asterisms:asterisms-backend-core-testing-utils:${asterismsBackendCoreVersion}")
     testImplementation("io.asterisms:asterisms-security-testing-utils:${asterismsSecurityVersion}")
