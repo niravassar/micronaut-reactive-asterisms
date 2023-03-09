@@ -16,7 +16,6 @@ public class Actor {
     private UUID id;
 
     private String name;
-
     private Integer age;
 
     public Actor() {
