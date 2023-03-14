@@ -3,14 +3,15 @@ package com.reactive.beginner.controller;
 import com.reactive.beginner.entity.Actor;
 import com.reactive.beginner.entity.Movie;
 import com.reactive.beginner.service.MovieService;
+import io.asterisms.account.account.services.LocalUserAccountFetcher;
 import io.asterisms.backend.core.notification.NotificationClient;
-import io.asterisms.core.account.AccountFetcherOperations;
+import io.asterisms.core.account.UserAccount;
 import io.asterisms.core.notifiable.NotifiableAccount;
 import io.asterisms.core.notification.Notification;
 import io.asterisms.core.notification.NotificationMessage;
+import io.asterisms.core.responses.GenericSuccessResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
-import jakarta.inject.Inject;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -19,14 +20,16 @@ import java.util.UUID;
 @Controller()
 public class MovieController {
 
-    @Inject
     MovieService movieService;
+    private final NotificationClient notificationClient;
+    private final LocalUserAccountFetcher localUserAccountFetcher;
 
-    @Inject
-    NotificationClient notificationClient;
-
-    @Inject
-    AccountFetcherOperations<NotifiableAccount> fetcherOperations;
+    public MovieController(MovieService movieService, NotificationClient notificationClient,
+                           LocalUserAccountFetcher localUserAccountFetcher) {
+        this.movieService = movieService;
+        this.notificationClient = notificationClient;
+        this.localUserAccountFetcher = localUserAccountFetcher;
+    }
 
     @Get("/hello")
     String sayHello() {
@@ -59,19 +62,16 @@ public class MovieController {
     }
 
     @Get("/sendNotification")
-    void sendNotificaton() {
+    String sendNotification() {
         // send notification using hard coded UUID
-        UUID gandalfAccountId = UUID.fromString("1ad9d574-1ab8-4ec9-af63-034c314b8ccd");
-        fetcherOperations.findAccountById(gandalfAccountId)
-                .map(account -> {
-                    NotificationMessage message = new NotificationMessage();
-                    message.setSubject(account.getIdentity());
-                    message.setText("simple message body");
-
-                    Notification notification = new Notification(message, account);
-
-                    notificationClient.send(notification);
-                    return null;
-                });
+        UUID gandalfAccountId = UUID.fromString("7e73c401-bc38-4151-9aa9-2e1bebb87805");
+        UserAccount userAccount = localUserAccountFetcher.findAccountById(gandalfAccountId).block();
+        NotificationMessage message = new NotificationMessage();
+        message.setSubject("Hello");
+        message.setText("Nirav Has Sent this message.");
+        NotifiableAccount notifiableAccount = NotifiableAccount.from(userAccount);
+        Notification notification = new Notification(message, notifiableAccount);
+        GenericSuccessResponse response = notificationClient.send(notification).block();
+        return "done";
     }
 }
