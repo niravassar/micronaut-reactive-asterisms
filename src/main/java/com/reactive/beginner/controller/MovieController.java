@@ -3,17 +3,32 @@ package com.reactive.beginner.controller;
 import com.reactive.beginner.entity.Actor;
 import com.reactive.beginner.entity.Movie;
 import com.reactive.beginner.service.MovieService;
+import io.asterisms.account.account.services.LocalUserAccountFetcher;
+import io.asterisms.backend.core.notification.NotificationClient;
+import io.asterisms.core.account.AccountQuery;
+import io.asterisms.core.account.UserAccount;
+import io.asterisms.core.notifiable.NotifiableAccount;
+import io.asterisms.core.notification.Notification;
+import io.asterisms.core.notification.NotificationMessage;
+import io.asterisms.core.responses.GenericSuccessResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
-import jakarta.inject.Inject;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Controller()
 public class MovieController {
 
-    @Inject
     MovieService movieService;
+    private final NotificationClient notificationClient;
+    private final LocalUserAccountFetcher localUserAccountFetcher;
+
+    public MovieController(MovieService movieService, NotificationClient notificationClient,
+                           LocalUserAccountFetcher localUserAccountFetcher) {
+        this.movieService = movieService;
+        this.notificationClient = notificationClient;
+        this.localUserAccountFetcher = localUserAccountFetcher;
+    }
 
     @Get("/hello")
     String sayHello() {
@@ -43,5 +58,19 @@ public class MovieController {
     @Get("/getActorsInDb")
     Flux<Actor> getActorsInDb() {
         return movieService.getAllActorsInDb().log();
+    }
+
+    @Get("/sendNotification")
+    String sendNotification() {
+        // get the gandalf email account
+        AccountQuery query = new AccountQuery("gandalf@example.com", "shire");
+        UserAccount userAccount = this.localUserAccountFetcher.find(query).block();
+        NotificationMessage message = new NotificationMessage();
+        message.setSubject("Hello");
+        message.setText("Nirav Has Sent this message.");
+        NotifiableAccount notifiableAccount = NotifiableAccount.from(userAccount);
+        Notification notification = new Notification(message, notifiableAccount);
+        GenericSuccessResponse response = notificationClient.send(notification).block();
+        return "done";
     }
 }

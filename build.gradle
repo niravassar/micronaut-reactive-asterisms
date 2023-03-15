@@ -13,6 +13,7 @@ repositories {
     maven {
         url = "${artifact_repoUrl}"
     }
+    mavenLocal()
     mavenCentral()
 }
 
@@ -30,6 +31,7 @@ dependencies {
     implementation("io.asterisms:asterisms-core:${asterismsCoreVersion}")
     implementation("io.asterisms:asterisms-backend-core:${asterismsBackendCoreVersion}")
     implementation("io.asterisms:asterisms-security:${asterismsSecurityVersion}")
+    implementation("io.asterisms:asterisms-account:${asterismsCoreVersion}")
 
     // Asterisms Default Database Setup
     annotationProcessor("io.micronaut.data:micronaut-data-processor")

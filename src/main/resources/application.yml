@@ -35,21 +35,32 @@ asterisms:
       jwt:
         issuer: "https://${asterisms.subdomain}.${asterisms.domain}"
 
+flyway:
+  datasources:
+    default:
+      enabled: false
+    asterisms-nirav:
+      enabled: true
+
 r2dbc:
   datasources:
     default:
+      url: "r2dbc:${DB_URL:`postgresql://asterismsDatabase:5432/io_asterisms_account`}"
+      username: "${DB_USERNAME:asterisms_account}"
+      password: "${DB_PASSWORD:`P@ss2022`}"
+      dialect: POSTGRES
+    asterisms-nirav:
       url: "r2dbc:${DB_URL:`postgresql://asterismsDatabase:5432/io_asterisms_nirav`}"
       username: "${DB_USERNAME:asterisms_nirav}"
       password: "${DB_PASSWORD:`P@ss2022`}"
       dialect: POSTGRES
 
-flyway:
-  datasources:
-    default:
-      enabled: true
-
 datasources:
   default:
+    url: "jdbc:${DB_URL:`postgresql://asterismsDatabase:5432/io_asterisms_account`}"
+    username: "${DB_USERNAME:asterisms_account}"
+    password: "${DB_PASSWORD:`P@ss2022`}"
+  asterisms-nirav:
     url: "jdbc:${DB_URL:`postgresql://asterismsDatabase:5432/io_asterisms_nirav`}"
     username: "${DB_USERNAME:asterisms_nirav}"
     password: "${DB_PASSWORD:`P@ss2022`}"
