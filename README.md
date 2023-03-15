@@ -23,6 +23,15 @@ these notes were taken along the way i am just saving them for reference.
 This section describes the features used within the asterisms eco-system, and also explains the technical
 details used to implement them
 
+## Live debugging Application in Asterisms Docker Environment
+
+In order to debug the application when it is plugged into the asterisms eco-system, you must create a `Remote JVM Debug`
+Configuration in Intellij. The `docker-compose.yml` exposes a debug port in java tool options, and the intellij
+must connect to do. Create a run configuration as `Remote JVM Debug`. Choose the port as 6000, and the `main` as the module.
+Run the configuration and see it connect.
+
+The configuration is stored as an xml file under `/.runConfiguration`, and checked in.
+
 ## JPA Entity Mapping to Postgres Database
 
 - The `Actor` entity is mapped to a postgres database. A reactive micronaut data repository is used to retrieve the data. 
@@ -30,14 +39,16 @@ details used to implement them
 - To set up the database in the asterisms system, you must execute the script in the `asterismsDatabase` container. For ex: `docker exec asterismsDatabase db_config/provision.sh asterisms_nirav io_asterisms_nirav`
 - See `application.yml` for configuration used to hook to the database
 
-## Live debugging Application in Asterisms Docker Environment
+## Sending Notifications to Asterisms User
 
-In order to debug the application when it is plugged into the asterisms eco-system, you must create a `Remote JVM Debug`
-Configuration in Intellij. The `docker-compose.yml` exposes a debug port in java tool options, and the intellij
-must connect to do. Create a run configuration as `Remote JVM Debug`. Choose the port as 6000, and the `main` as the module.
-Run the configuration and see it connect. 
+The application has a controller method which will send a basic message to an authorized user in the asterisms system. See 
+`MovieController`, the `sendNotification()` method.  This method searches for the `gandalf@example.com`, then uses the asterisms
+notification api to send a message. 
 
-The configuration is stored as an xml file under `/.runConfiguration`, and checked in. 
+The api is in `io.asterisms:asterisms-account` and this requires a direct db connection to the asterismsDatabase. I created a multiple datasource
+connection so that we could have a connection to asterisms databases, and also one to the custom application database. 
+
+Execute `/sendNotification` and then check mailhog to see the notification come through to the gandalf account. 
 
 ---
 # Micronaut Reactive Asterisms Application Summary
