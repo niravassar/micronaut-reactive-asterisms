@@ -5,6 +5,7 @@ import com.reactive.beginner.entity.Movie;
 import com.reactive.beginner.service.MovieService;
 import io.asterisms.account.account.services.LocalUserAccountFetcher;
 import io.asterisms.backend.core.notification.NotificationClient;
+import io.asterisms.core.account.AccountQuery;
 import io.asterisms.core.account.UserAccount;
 import io.asterisms.core.notifiable.NotifiableAccount;
 import io.asterisms.core.notification.Notification;
@@ -14,8 +15,6 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.UUID;
 
 @Controller()
 public class MovieController {
@@ -63,11 +62,9 @@ public class MovieController {
 
     @Get("/sendNotification")
     String sendNotification() {
-        // send notification using hard coded UUID
-        UUID gandalfAccountId = UUID.fromString("7e73c401-bc38-4151-9aa9-2e1bebb87805");
-
-
-        UserAccount userAccount = localUserAccountFetcher.findAccountById(gandalfAccountId).block();
+        // get the gandalf email account
+        AccountQuery query = new AccountQuery("gandalf@example.com", "shire");
+        UserAccount userAccount = this.localUserAccountFetcher.find(query).block();
         NotificationMessage message = new NotificationMessage();
         message.setSubject("Hello");
         message.setText("Nirav Has Sent this message.");
