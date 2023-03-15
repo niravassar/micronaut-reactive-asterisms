@@ -7,6 +7,6 @@ import io.micronaut.data.repository.reactive.ReactorCrudRepository;
 
 import java.util.UUID;
 
-@R2dbcRepository(dialect = Dialect.POSTGRES)
+@R2dbcRepository(dialect = Dialect.POSTGRES, dataSource = "asterisms-nirav")
 public interface ActorRepository extends ReactorCrudRepository<Actor, UUID> {
 }

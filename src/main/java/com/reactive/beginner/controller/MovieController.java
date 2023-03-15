@@ -65,6 +65,8 @@ public class MovieController {
     String sendNotification() {
         // send notification using hard coded UUID
         UUID gandalfAccountId = UUID.fromString("7e73c401-bc38-4151-9aa9-2e1bebb87805");
+
+
         UserAccount userAccount = localUserAccountFetcher.findAccountById(gandalfAccountId).block();
         NotificationMessage message = new NotificationMessage();
         message.setSubject("Hello");
