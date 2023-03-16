@@ -50,6 +50,16 @@ connection so that we could have a connection to asterisms databases, and also o
 
 Execute `/sendNotification` and then check mailhog to see the notification come through to the gandalf account. 
 
+## Testing Using Spock    
+
+I was only able to get tests working in this application by using the spock testing harness. The original application was built
+with Junit tests using `@MicronautTest` annotation. Once I installed asterimsms dependencies the test Netty server would not start up any longer.
+
+I converted all the tests to spock test harness by adding in the necessary dependencies and changing the syntax of the tests to abide by spock.
+The tests work and pass. Therefore Asterisms may be incompatible with Junit at this time. 
+
+
+
 ---
 # Micronaut Reactive Asterisms Application Summary
 
