@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id "io.freefair.lombok" version "5.3.0"
     id "com.google.cloud.artifactregistry.gradle-plugin" version "2.1.5"
+    id("groovy")
 }
 
 version = "0.1"
@@ -42,8 +43,10 @@ dependencies {
     testImplementation("io.asterisms:asterisms-security-testing-utils:${asterismsSecurityVersion}")
 
     testImplementation("io.projectreactor:reactor-test:3.4.0")
-    testImplementation('org.junit.jupiter:junit-jupiter:5.5.1')
+    testImplementation("com.h2database:h2")
 
+    testImplementation "io.micronaut.test:micronaut-test-spock"
+    implementation("io.micronaut.groovy:micronaut-runtime-groovy")
 }
 
 
@@ -58,7 +61,7 @@ java {
 graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")
-    testRuntime("junit5")
+    testRuntime("spock2")
     processing {
         incremental(true)
         annotations("com.reactive.beginner.*")
