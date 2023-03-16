@@ -58,7 +58,17 @@ with Junit tests using `@MicronautTest` annotation. Once I installed asterimsms 
 I converted all the tests to spock test harness by adding in the necessary dependencies and changing the syntax of the tests to abide by spock.
 The tests work and pass. Therefore Asterisms may be incompatible with Junit at this time. 
 
+**UPDATE** 
 
+Junit tests will work if you apply this configuration into `application-test.yml`
+
+```
+micronaut:
+  server:
+    port: -1
+    ssl:
+      enabled: false
+```
 
 ---
 # Micronaut Reactive Asterisms Application Summary
