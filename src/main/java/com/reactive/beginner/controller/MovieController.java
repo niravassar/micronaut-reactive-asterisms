@@ -11,12 +11,14 @@ import io.asterisms.core.notifiable.NotifiableAccount;
 import io.asterisms.core.notification.Notification;
 import io.asterisms.core.notification.NotificationMessage;
 import io.asterisms.core.responses.GenericSuccessResponse;
+import io.asterisms.security.authorization.rules.annotation.RequiresMemberOfWorkspace;
+import io.asterisms.security.authorization.rules.annotation.Unsecured;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Controller()
+@Controller("/api")
 public class MovieController {
 
     MovieService movieService;
@@ -30,36 +32,43 @@ public class MovieController {
         this.localUserAccountFetcher = localUserAccountFetcher;
     }
 
+    @Unsecured
     @Get("/hello")
     String sayHello() {
         return "Hello";
     }
 
+    @RequiresMemberOfWorkspace
     @Get("/findDramasAfter78")
     Flux<Movie> findDramaAfter78() {
         return movieService.findAllMoviesWithGenreAndMadeAfterYear(Movie.DRAMA, 1978);
     }
 
+    @Unsecured
     @Get("/getMoviesAndYearInTitle")
     Flux<Movie> getAllMoviesToUpperCaseAndYearInTitle() {
         return movieService.getAllMoviesWithUpperCaseAndYearInTitle();
     }
 
+    @Unsecured
     @Get("/findActorsOlder64")
     Flux<Actor> findAllActorsOlderThan64() {
         return movieService.findAllActorsOlderThanAge(64).log();
     }
 
+    @Unsecured
     @Get("/addJimCarreyToMovieAsActor")
     Mono<Movie> addJimCarreyToMovieAsActor() {
         return movieService.addJimCarreyToMovieAsActor().log();
     }
 
+    @Unsecured
     @Get("/getActorsInDb")
     Flux<Actor> getActorsInDb() {
         return movieService.getAllActorsInDb().log();
     }
 
+    @Unsecured
     @Get("/sendNotification")
     String sendNotification() {
         // get the gandalf email account
