@@ -10,6 +10,9 @@ micronaut:
         path: file:/certificates/asterisms_local.p12
         password: changeit
         type: PKCS12
+  security:
+    filter:
+      enabled: false
 netty:
   default:
     allocator:
@@ -27,6 +30,7 @@ asterisms:
     - FRONTEND_WEBSITE
   security:
     filter:
+      enabled: true
       pattern: "/api/**"
     token:
       jwks:
