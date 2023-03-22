@@ -18,7 +18,7 @@ import io.micronaut.http.annotation.Get;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Controller("/api")
+@Controller("/api/workspace/{workspaceId}")
 public class MovieController {
 
     MovieService movieService;
